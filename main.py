@@ -3,7 +3,6 @@ from utils.icons import BUILDING, OVERVIEW, icon_html
 
 from config import BUILDINGS, LIGHT_ON_THRESHOLD, SOUND_LOUD_THRESHOLD
 from utils.firebase_client import fetch_rooms
-from utils.icons import BUILDING, icon_html
 from utils.theme import inject_base_css
 
 st.set_page_config(page_title="Room-Check | Smart Campus", page_icon="◻", layout="wide")
@@ -15,7 +14,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.image("images/Homepage1.jfif", use_container_width=True)
+col_left, col_center, col_right = st.columns([1, 3, 1])
+with col_center:
+    st.image("images/Homepage1.jfif", width=880)
 
 st.write("")
 st.markdown("<div class='swiss-label'>Select building</div>", unsafe_allow_html=True)

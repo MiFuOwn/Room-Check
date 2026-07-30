@@ -183,6 +183,41 @@ BASE_CSS = f"""
         color: {COLOR_ACCENT};
         font-size: 1.3rem;
     }}
+    /* --- Overview table --- */
+    .overview-building {{
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: {COLOR_NEUTRAL};
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin: 18px 0 4px;
+    }}
+    .overview-row {{
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr 1fr;
+        align-items: center;
+        padding: 10px 14px;
+        border-bottom: 1px solid {COLOR_BORDER};
+        font-size: 0.9rem;
+    }}
+    .overview-row.header {{
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: {COLOR_NEUTRAL};
+        border-bottom: 2px solid {COLOR_PRIMARY};
+    }}
+
+    .campus-banner {{
+        display: flex;
+        justify-content: center;
+    }}
+    .campus-banner img {{
+        max-width: 100%;
+        width: 700px;
+        border-radius: 0px;
+    }}   
 
 </style>
 """

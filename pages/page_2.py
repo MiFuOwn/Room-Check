@@ -31,25 +31,23 @@ for building_name, room_ids in BUILDINGS.items():
 
     readings = fetch_rooms(room_ids)
 
-    st.markdown(
-        """
-        <div class="overview-row header">
-            <div>Room</div><div>Light</div><div>Sound</div><div>Status</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    header_html = (
+        '<div class="overview-row header">'
+        '<div>Room</div><div>Light</div><div>Sound</div><div>Status</div>'
+        '</div>'
     )
+    st.markdown(header_html, unsafe_allow_html=True)
 
     for room_id in room_ids:
         r = readings[room_id]
         if r.light is None or r.sound is None:
-            st.markdown(
-                f"""<div class="overview-row">
-                    <div>{room_id}</div><div>—</div><div>—</div>
-                    <div><span class="status-badge">offline</span></div>
-                </div>""",
-                unsafe_allow_html=True,
+            row_html = (
+                '<div class="overview-row">'
+                f'<div>{room_id}</div><div>—</div><div>—</div>'
+                '<div><span class="status-badge">offline</span></div>'
+                '</div>'
             )
+            st.markdown(row_html, unsafe_allow_html=True)
             continue
 
         is_light_on = r.light <= LIGHT_ON_THRESHOLD
@@ -59,12 +57,12 @@ for building_name, room_ids in BUILDINGS.items():
         overall_cls = "alert" if (is_light_on or is_noisy) else "ok"
         overall_text = "attention" if (is_light_on or is_noisy) else "normal"
 
-        st.markdown(
-            f"""<div class="overview-row">
-                <div>{room_id}</div>
-                <div><span class="status-badge {light_cls}">{'on' if is_light_on else 'off'}</span></div>
-                <div><span class="status-badge {sound_cls}">{'loud' if is_noisy else 'quiet'}</span></div>
-                <div><span class="status-badge {overall_cls}">{overall_text}</span></div>
-            </div>""",
-            unsafe_allow_html=True,
+        row_html = (
+            '<div class="overview-row">'
+            f'<div>{room_id}</div>'
+            f'<div><span class="status-badge {light_cls}">{"on" if is_light_on else "off"}</span></div>'
+            f'<div><span class="status-badge {sound_cls}">{"loud" if is_noisy else "quiet"}</span></div>'
+            f'<div><span class="status-badge {overall_cls}">{overall_text}</span></div>'
+            '</div>'
         )
+        st.markdown(row_html, unsafe_allow_html=True)

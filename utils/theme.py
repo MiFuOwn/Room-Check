@@ -215,7 +215,7 @@ BASE_CSS = f"""
     }}
     .campus-banner img {{
         max-width: 100%;
-        width: 700px;
+        width: 900px;
         border-radius: 0px;
     }}   
 

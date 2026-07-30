@@ -16,7 +16,7 @@ st.markdown(
 
 col_left, col_center, col_right = st.columns([1, 3, 1])
 with col_center:
-    st.image("images/Homepage1.jfif", width=880)
+    st.image("images/Homepage1.jfif", width=900)
 
 st.write("")
 st.markdown("<div class='swiss-label'>Select building</div>", unsafe_allow_html=True)

@@ -1,54 +1,78 @@
 import streamlit as st
+from utils.icons import BUILDING, OVERVIEW, icon_html
 
-st.set_page_config(page_title="Smart Campus Dashboard", page_icon="🏫", layout="wide")
+from config import BUILDINGS, LIGHT_ON_THRESHOLD, SOUND_LOUD_THRESHOLD
+from utils.firebase_client import fetch_rooms
+from utils.icons import BUILDING, icon_html
+from utils.theme import inject_base_css
 
-st.markdown("""
-<style>
-    .main-header {
-        font-size: 2.8rem;
-        font-weight: bold;
-        color: #1E3A8A;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-    .sub-header {
-        text-align: center;
-        color: #6B7280;
-        margin-bottom: 40px;
-        font-size: 1.2rem;
-    }
-    div[data-testid="column"] {
-        background-color: #F8FAFC;
-        border-radius: 12px;
-        padding: 10px;
-        border: 1px solid #E2E8F0;
-        transition: 0.3s;
-    }
-    div[data-testid="column"]:hover {
-        background-color: #EFF6FF;
-        border-color: #BFDBFE;
-    }
-</style>
-""", unsafe_allow_html=True)
+st.set_page_config(page_title="Room-Check | Smart Campus", page_icon="◻", layout="wide")
+inject_base_css()
 
-st.markdown("<div class='main-header'>🏫 Smart Campus Dashboard</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>ระบบตรวจสอบและจัดการอาคารเรียนอัจฉริยะ (Smart Building Management System)</div>", unsafe_allow_html=True)
+st.markdown("<div class='swiss-header'>Room-Check</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div class='swiss-subheader'>ระบบตรวจสอบและจัดการสถานะห้องเรียนแบบเรียลไทม์</div>",
+    unsafe_allow_html=True,
+)
 
-st.markdown("#### 🏢 เลือกอาคารที่ต้องการตรวจสอบ")
-col1, col2, col3, col4 = st.columns(4)
+st.image("https://picsum.photos/seed/roomcheck-campus/1200/300", use_container_width=True)
 
-with col1:
-    st.page_link("pages/page_1.py", label="Building 2", icon="🏢")
-with col2:
-    st.page_link("pages/page_1.py", label="Building 7", icon="🏢")
-with col3:
-    st.page_link("pages/page_1.py", label="Building 9", icon="🏢")
-with col4:
-    st.page_link("pages/page_1.py", label="Building 12", icon="🏢")
+st.write("")
+st.markdown("<div class='swiss-label'>Select building</div>", unsafe_allow_html=True)
+st.write("")
+
+building_names = list(BUILDINGS.keys())
+columns = st.columns(len(building_names))
+
+for col, name in zip(columns, building_names):
+    room_ids = BUILDINGS[name]
+    caption = f"{len(room_ids)} rooms monitored" if room_ids else "Not yet instrumented"
+
+    light_count = noisy_count = 0
+    if room_ids:
+        readings = fetch_rooms(room_ids)
+        for r in readings.values():
+            if r.light is not None and r.light <= LIGHT_ON_THRESHOLD:
+                light_count += 1
+            if r.sound is not None and r.sound >= SOUND_LOUD_THRESHOLD:
+                noisy_count += 1
+
+    badges = ""
+    if room_ids:
+        light_cls = "alert" if light_count else "ok"
+        sound_cls = "alert" if noisy_count else "ok"
+        badges = (
+            '<div class="badge-row">'
+            f'<span class="status-badge {light_cls}">Light {light_count}</span>'
+            f'<span class="status-badge {sound_cls}">Loud {noisy_count}</span>'
+            '</div>'
+        )
+
+    with col:
+        card_html = (
+            '<a href="/page_1" target="_self" style="text-decoration:none;">'
+            '<div class="building-card">'
+            f'{icon_html(BUILDING)}'
+            f'<div class="building-name">{name}</div>'
+            f'<div class="building-caption">{caption}</div>'
+            f'{badges}'
+            '</div>'
+            '</a>'
+        )
+        st.markdown(card_html, unsafe_allow_html=True)
 
 st.write("---")
-
-# จัดให้อยู่ตรงกลางด้วย Columns
-col_img1, col_img2, col_img3 = st.columns([1, 2, 1])
-with col_img2:
-    st.image('image/Homepage1.jfif', caption='บรรยากาศและสถานที่ต่างๆ ภายในมหาวิทยาลัย', use_container_width=True)
+st.markdown(
+    '<a href="/page_2" target="_self" style="text-decoration:none;">'
+    '<div class="overview-cta">'
+    f'{icon_html(OVERVIEW, "accent")}'
+    '<div>'
+    '<div class="overview-cta-title">View overview of all rooms</div>'
+    '<div class="overview-cta-caption">เห็นทุกห้องทุกตึกในหน้าเดียว</div>'
+    '</div>'
+    '<div class="overview-cta-arrow">&#8594;</div>'
+    '</div>'
+    '</a>',
+    unsafe_allow_html=True,
+)
+st.caption("Data is read live from Firebase Realtime Database.")

@@ -3,10 +3,28 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Room-Check project secrets
+.streamlit/secrets.toml
+room_check_sensor/secrets.h
+roomcheek-firebase-adminsdk-t7vxt-0ceaa950aa.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
 # C extensions
 *.so
 
 # Distribution / packaging
+roomcheek-firebase-adminsdk-t7vxt-0ceaa950aa.json
 .Python
 build/
 develop-eggs/
@@ -25,6 +43,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.private_key
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

@@ -15,7 +15,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.image("https://picsum.photos/seed/roomcheck-campus/1200/300", use_container_width=True)
+st.image("images/Homepage1.jfif", use_container_width=True)
 
 st.write("")
 st.markdown("<div class='swiss-label'>Select building</div>", unsafe_allow_html=True)
